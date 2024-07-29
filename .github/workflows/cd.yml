@@ -39,4 +39,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-          aws s3 sync public/ s3://randombucketnamecodefsltryagain/${BRANCH_NAME}/ --delete
+          aws s3 sync -- region us-west-2 public/ s3://randombucketnamecodefsltryagain/${BRANCH_NAME}/ --delete
