@@ -2,7 +2,7 @@ name: Node.js CD
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     branches:
       - devel
       - stage
@@ -12,6 +12,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
@@ -41,13 +42,5 @@ jobs:
           aws-region: us-west-2
 
       - name: Deploy to S3
-        if: github.event_name == 'push' || github.event_name == 'pull_request' && github.base_ref == 'devel'
-        run: aws s3 sync public s3://randombucketnamecodefsltryagain --delete
-  
-      - name: Deploy to S3
-        if: github.event_name == 'push' || github.event_name == 'pull_request' && github.base_ref == 'stage'
-        run: aws s3 sync public s3://randombucketnamecodefsltryagain --delete
-  
-      - name: Deploy to S3
-        if: github.event_name == 'push' || github.event_name == 'pull_request' && github.base_ref == 'prod'
-        run: aws s3 sync public s3://randombucketnamecodefsltryagain --delete
+        run: aws s3 sync public s3://${{env.bucket}} --delete
+
