@@ -43,3 +43,4 @@ jobs:
 
       - name: Deploy to S3
         run: aws s3 sync public s3://${{env.bucket}} --delete
+
