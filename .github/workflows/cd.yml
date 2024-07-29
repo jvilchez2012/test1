@@ -42,12 +42,12 @@ jobs:
 
       - name: Deploy to S3
         if: github.event_name == 'push' || github.event_name == 'pull_request' && github.base_ref == 'devel'
-        run: aws s3 sync public s3://my-app-bucket-devel --delete
+        run: aws s3 sync public s3://randombucketnamecodefsltryagain --delete
   
       - name: Deploy to S3
         if: github.event_name == 'push' || github.event_name == 'pull_request' && github.base_ref == 'stage'
-        run: aws s3 sync public s3://my-app-bucket-stage --delete
+        run: aws s3 sync public s3://randombucketnamecodefsltryagain --delete
   
       - name: Deploy to S3
         if: github.event_name == 'push' || github.event_name == 'pull_request' && github.base_ref == 'prod'
-        run: aws s3 sync public s3://my-app-bucket-prod --delete
+        run: aws s3 sync public s3://randombucketnamecodefsltryagain --delete
