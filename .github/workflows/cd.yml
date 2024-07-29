@@ -38,10 +38,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          if ["${{github.ref}}" == "refs/heads/devel"]; then
-            aws s3 sync public/ s3://randombucketnamecodefsl-devel --delete
-          elif ["${{github.ref}}" == "refs/heads/stage"]; then
-            aws s3 sync public/ s3://randombucketnamecodefsl-stage --delete
-          elif ["${{github.ref}}" == "refs/heads/stage"]; then
-            aws s3 sync public/ s3://randombucketnamecodefsl-prod --delete
-          fi
+          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
+          aws s3 sync public/ s3://randombucketnamecodefsltryagain/${BRANCH_NAME}/ --delete
