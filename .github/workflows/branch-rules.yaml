@@ -1,0 +1,35 @@
+name: Enforce Branch Rules
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+
+jobs:
+  check-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branches
+        run: |
+          BASE_BRANCH="${{ github.base_ref }}"
+          HEAD_BRANCH="${{ github.head_ref }}"
+
+          if [ "$BASE_BRANCH" == "stage" ] && [ "$HEAD_BRANCH" != "devel" ]; then
+            echo "Error: Only merges from devel to stage are allowed."
+            exit 1
+          elif [ "$BASE_BRANCH" == "prod" ] && [ "$HEAD_BRANCH" != "stage" ]; then
+            echo "Error: Only merges from stage to prod are allowed."
+            exit 1
+          elif [ "$BASE_BRANCH" == "devel" ] && [ "$HEAD_BRANCH" == "$BASE_BRANCH" ]; then
+            echo "Error: Direct merges to devel are not allowed. Use a feature or bugfix branch."
+            exit 1
+          elif [ "$BASE_BRANCH" == "stage" ] && [ "$HEAD_BRANCH" == "$BASE_BRANCH" ]; then
+            echo "Error: Direct merges to stage are not allowed. Merge from devel."
+            exit 1
+          elif [ "$BASE_BRANCH" == "prod" ] && [ "$HEAD_BRANCH" == "$BASE_BRANCH" ]; then
+            echo "Error: Direct merges to prod are not allowed. Merge from stage."
+            exit 1
+          fi
